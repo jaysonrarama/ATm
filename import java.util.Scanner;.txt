@@ -1,0 +1,110 @@
+import java.util.Scanner;
+
+public class MiniATM {
+
+    private static double balance = 10000.0;
+    private static final int PIN = 123456;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        if (!login(sc)) {
+            System.out.println("Incorrect PIN! Exiting...");
+            return;
+        }
+
+        while (true) {
+            showMenu();
+            System.out.print("Choose option: ");
+
+            int choice = getInt(sc);
+
+            switch (choice) {
+                case 1 -> displayBalance();
+                case 2 -> deposit(sc);    
+                case 3 -> withdraw(sc);   
+                case 4 -> {
+                    System.out.println("Thank you for using the ATM.");
+                    return;
+                }
+                default -> System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+
+  
+    private static boolean login(Scanner sc) {
+        System.out.print("Enter PIN: ");
+        int enteredPin = getInt(sc);
+        return enteredPin == PIN;
+    }
+
+    private static void showMenu() {
+        System.out.println("\n--- ATM MENU ---");
+        System.out.println("1. Check Balance");
+        System.out.println("2. Deposit");
+        System.out.println("3. Withdraw");
+        System.out.println("4. Exit");
+    }
+
+    private static void displayBalance() {
+        System.out.println("Current Balance: " + balance);
+    }
+
+    private static void deposit(Scanner sc) {
+        System.out.print("Enter deposit amount: ");
+        double amount = getDouble(sc);
+
+        if (amount <= 0) {
+            System.out.println("Invalid amount!");
+            return;
+        }
+
+        balance += amount;
+        System.out.println("Deposit successful!");
+
+      
+        System.out.println("Updated Balance: " + balance);
+    }
+
+    private static void withdraw(Scanner sc) {
+        System.out.print("Enter withdraw amount: ");
+        double amount = getDouble(sc);
+
+        if (amount <= 0) {
+            System.out.println("Invalid amount!");
+            return;
+        }
+
+        if (amount > balance) {
+            System.out.println("Insufficient balance!");
+            return;
+        }
+
+        balance -= amount;
+        System.out.println("Withdrawal successful!");
+
+       
+        System.out.println("Remaining Balance: " + balance);
+ 
+        System.out.println("Transaction complete. Exiting ATM...");
+        System.exit(0);
+    }
+
+  
+    private static int getInt(Scanner sc) {
+        while (!sc.hasNextInt()) {
+            sc.next();
+            System.out.print("Invalid input. Enter number: ");
+        }
+        return sc.nextInt();
+    }
+
+    private static double getDouble(Scanner sc) {
+        while (!sc.hasNextDouble()) {
+            sc.next();
+            System.out.print("Invalid input. Enter number: ");
+        }
+        return sc.nextDouble();
+    }
+}
